@@ -1,7 +1,12 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.ProductDTO;
+import com.example.shopapp.dtos.ProductImageDTO;
+import com.example.shopapp.models.Product;
+import com.example.shopapp.models.ProductImage;
+import com.example.shopapp.sevices.IProductService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +27,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
+@RequiredArgsConstructor
 public class ProductController {
+    private final IProductService productService;
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createProduct(
             @Valid @ModelAttribute ProductDTO productDTO,
@@ -37,6 +44,7 @@ public class ProductController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
+            Product newProduct = productService.createProduct(productDTO);
             List<MultipartFile> files = productDTO.getFiles();
             files = files == null ? new ArrayList<>() : files;
             for(MultipartFile file : files){
@@ -52,9 +60,13 @@ public class ProductController {
                             .body("File must be an image");
                 }
                 String filename = storeFile(file);
+                ProductImage productImage = productService.createProductImage(
+                        newProduct.getId(), ProductImageDTO.builder()
+                                .imageUrl(filename)
+                                .build());
                 // save into product_images table
             }
-            return ResponseEntity.ok("Product create successfully");
+            return ResponseEntity.ok("Product created successfully");
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
