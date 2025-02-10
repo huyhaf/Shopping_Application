@@ -10,6 +10,7 @@ import com.example.shopapp.models.ProductImage;
 import com.example.shopapp.repositories.CategoryRepository;
 import com.example.shopapp.repositories.ProductImageRepository;
 import com.example.shopapp.repositories.ProductRepository;
+import com.example.shopapp.responses.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class ProductService implements IProductService {
     private final ProductImageRepository productImageRepository;
 
     @Override
-    public Product createProduct(ProductDTO productDTO) throws DataNotFoundException {
+    public Product createProduct(ProductDTO productDTO) throws Exception {
         Category existingCategory = categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id:" + productDTO.getCategoryId()));
         Product newProduct = Product.builder()
@@ -38,19 +39,35 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(long productId) throws DataNotFoundException {
+    public Product getProductById(long productId) throws Exception {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find product with id:"+productId));
     }
 
     @Override
-    public Page<Product> getAllProducts(PageRequest pageRequest) {
-        return productRepository.findAll(pageRequest);
+    public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
+        return productRepository.findAll(pageRequest).map(product -> {
+            ProductResponse productResponse = ProductResponse.builder()
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .thumbnail(product.getThumbnail())
+                    .description(product.getDescription())
+                    .categoryId(product.getCategory().getId())
+                    .build();
+            productResponse.setCreatedAt(product.getCreatedAt());
+            productResponse.setUpdatedAt(product.getUpdatedAt());
+            return productResponse;
+        });
     }
 
     @Override
-    public Product updateProduct(long id, ProductDTO productDTO) throws DataNotFoundException {
-        Product existingProduct = getProductById(id);
+    public Product updateProduct(long id, ProductDTO productDTO) throws Exception {
+        Product existingProduct;
+        try {
+            existingProduct = getProductById(id);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if (existingProduct!=null){
             Category existingCategory = categoryRepository.findById(productDTO.getCategoryId())
                     .orElseThrow(() -> new DataNotFoundException("Cannot find category with id:" + productDTO.getCategoryId()));
@@ -77,7 +94,7 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductImage createProductImage(long productId, ProductImageDTO productImageDTO) throws Exception {
-        Product existingProduct = productRepository.findById(productImageDTO.getProductId())
+        Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id:" + productImageDTO.getProductId()));
         ProductImage newProductImage = ProductImage.builder()
                 .product(existingProduct)
@@ -85,8 +102,8 @@ public class ProductService implements IProductService {
                 .build();
         // ko cho insert 5 anh cho 1 san pham
         int size = productImageRepository.findByProductId(existingProduct.getId()).size();
-        if (size >= 5){
-            throw new InvalidParamException("Number of images must be <= 5");
+        if (size >= ProductImage.MAXIMUM_IMAGES_PER_PRODUCT){
+            throw new InvalidParamException("Number of images must be <= "+ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
         }
         return productImageRepository.save(newProductImage);
     }
