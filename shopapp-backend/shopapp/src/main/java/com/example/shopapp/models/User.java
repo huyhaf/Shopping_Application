@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,6 +29,7 @@ public class User {
     @Column(name = "password", length = 200,nullable = false)
     private String password;
 
+    @Column(name = "is_active")
     private Boolean active;
 
     @Column(name = "date_of_birth")
