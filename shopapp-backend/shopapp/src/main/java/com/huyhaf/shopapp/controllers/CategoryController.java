@@ -1,15 +1,23 @@
 package com.huyhaf.shopapp.controllers;
+import com.huyhaf.shopapp.components.LocalizationUtils;
 import com.huyhaf.shopapp.dtos.CategoryDTO;
 import com.huyhaf.shopapp.models.Category;
+import com.huyhaf.shopapp.responses.UpdateCategoryResponse;
 import com.huyhaf.shopapp.sevices.CategoryService;
+import com.huyhaf.shopapp.utils.MessageKeys;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("${api.prefix}/categories")
@@ -17,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
+    private final LocalizationUtils localizationUtils;
     @PostMapping("")
     public ResponseEntity<?> createCategories(
             @Valid @RequestBody CategoryDTO categoryDTO,
@@ -42,12 +51,15 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCategories (
+    public ResponseEntity<UpdateCategoryResponse> updateCategories (
             @PathVariable Long id,
-            @Valid @RequestBody CategoryDTO categoryDTO
+            @Valid @RequestBody CategoryDTO categoryDTO,
+            HttpServletRequest request
     ){
         categoryService.updateCategory(id, categoryDTO);
-        return ResponseEntity.ok("update category successfully");
+        return ResponseEntity.ok(UpdateCategoryResponse.builder()
+                        .message(localizationUtils.getLocalizedMessage(MessageKeys.CATEGORY_UPDATE_SUCCESS))
+                .build());
     }
 
     @DeleteMapping("/{id}")

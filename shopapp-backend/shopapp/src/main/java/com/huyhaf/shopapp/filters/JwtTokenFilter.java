@@ -1,6 +1,6 @@
 package com.huyhaf.shopapp.filters;
 
-import com.huyhaf.shopapp.components.JwtTokenUtil;
+import com.huyhaf.shopapp.components.JwtTokenUtils;
 import com.huyhaf.shopapp.models.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -30,13 +31,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private String apiPrefix;
 
     private final UserDetailsService userDetailsService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws IOException {
         try {
+            if (CorsUtils.isPreFlightRequest(request)) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            }
             if(isBypassToken(request)){
                 filterChain.doFilter(request, response);
                 return;

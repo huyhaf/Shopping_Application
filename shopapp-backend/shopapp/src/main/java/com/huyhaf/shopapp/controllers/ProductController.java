@@ -1,5 +1,6 @@
 package com.huyhaf.shopapp.controllers;
 
+import com.huyhaf.shopapp.components.LocalizationUtils;
 import com.huyhaf.shopapp.dtos.ProductDTO;
 import com.huyhaf.shopapp.dtos.ProductImageDTO;
 import com.huyhaf.shopapp.models.Product;
@@ -37,6 +38,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProductController {
     private final IProductService productService;
+    private final LocalizationUtils localizationUtils;
     @PostMapping("")
     public ResponseEntity<?> createProduct(
             @Valid @RequestBody ProductDTO productDTO,
