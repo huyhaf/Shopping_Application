@@ -1,5 +1,6 @@
 package com.huyhaf.shopapp.controllers;
 
+import com.huyhaf.shopapp.components.LocalizationUtils;
 import com.huyhaf.shopapp.dtos.OrderDTO;
 import com.huyhaf.shopapp.models.Order;
 import com.huyhaf.shopapp.sevices.IOrderService;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final IOrderService orderService;
+    private final LocalizationUtils localizationUtils;
     @PostMapping("")
     public ResponseEntity<?> createOrder(
             @RequestBody @Valid OrderDTO orderDTO,

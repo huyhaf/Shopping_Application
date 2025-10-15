@@ -1,5 +1,6 @@
 package com.huyhaf.shopapp.controllers;
 
+import com.huyhaf.shopapp.components.LocalizationUtils;
 import com.huyhaf.shopapp.dtos.OrderDetailDTO;
 import com.huyhaf.shopapp.models.OrderDetail;
 import com.huyhaf.shopapp.responses.OrderDetailResponse;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderDetailController {
     private final IOrderDetailService orderDetailService;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping("")
     public ResponseEntity<?> createOrderDetail(

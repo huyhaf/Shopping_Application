@@ -1,0 +1,93 @@
+<!-- <app-header></app-header> -->
+<div class="top-space"></div>
+<div class="container">
+    <form action="" #registerForm="ngForm">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="register-form mx-auto">
+                    <h2 class="register-header">Đăng ký</h2>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" name="phone" [(ngModel)]="phone" id="phone" class="form-control"
+                            placeholder="Nhập số điện thoại"
+                            (input) ="onPhoneChange()" required
+                            (focus)="registerForm.form.markAsTouched()">
+                        <div class="divider-nospace"></div>
+                        <p class="text-danger" *ngIf="phone.length < 6 && registerForm.form.touched">
+                            Số điện thoại phải có ít nhất 6 kí tự
+                        </p>
+                    </div>
+                    <div class="mt-3"></div>
+                    <div class="form-group password-field">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" class="form-control"
+                            [(ngModel)]="password"
+                            placeholder="Nhập mật khẩu"
+                            name="password" required>
+                        <i class="password-toggle fas fa-eye-slash"></i>
+                        <div class="divider-nospace"></div>
+                        <p class="text-danger" *ngIf="password.length < 6 && registerForm.form.touched">
+                            Mật khẩu phải có ít nhất 6 kí tự
+                        </p>
+                    </div>
+                    <div class="mt-3"></div>
+                    <div class="form-group password-field">
+                        <label for="retype-password">Nhập lại mật khẩu</label>
+                        <input type="password" id="retype-password" class="form-control"
+                            placeholder="Nhập lại mật khẩu"
+                            [(ngModel)] = "retypePassword"
+                            (input)="registerForm.form.markAsTouched(); checkPasswordMatch();"
+                            name="retypePassword" required>
+                        <i class="password-toggle fas fa-eye-slash"></i>
+                        <div class="divider-nospace"></div>
+                        <p class="text-danger" *ngIf="retypePassword.length < 6 && registerForm.form.touched">
+                            Mật khẩu phải có ít nhất 6 kí tự
+                        </p>
+                        <p class="text-danger"
+                            *ngIf="registerForm.controls['retypePassword'].hasError('passwordMismatch') && registerForm.form.touched">
+                            Mật khẩu không khớp
+                        </p>
+                    </div>
+                    <div class="mt-3"></div>
+                    <div class="form-group">
+                        <label for="fullname">Họ và tên</label>
+                        <input type="text" name="fullname" id="fullname" class="form-control"
+                            [(ngModel)]="fullname">
+                        <div class="divider-nospace"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Ngày tháng năm sinh</label>
+                        <input type="date" name="dob" id="dob" class="form-control"
+                            [(ngModel)]="dob" required
+                            (input)="registerForm.form.markAsTouched(); checkAge();">
+                        <div class="divider-nospace"></div>
+                        <p class="text-danger" *ngIf="registerForm.controls['dob'].hasError('ageUnder18') && registerForm.form.touched">
+                            Bạn phải đủ 18 tuổi để đăng kí
+                        </p>
+                    </div>
+                    <div class="mt-3"></div>
+                    <div class="form-group">
+                        <label for="address">Địa chỉ</label>
+                        <input type="text" name="address" id="address" class="form-control"
+                            [(ngModel)]="address" required>
+                        <div class="divider-nospace"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check checkbox-text">
+                            <span style="display: flex;">
+                                <input type="checkbox" name="isAccepted" id="agree" class="form-check-input"
+                                    [(ngModel)]="isAccepted">
+                                <label for="agree" class="form-check-label text-start">Tôi đồng ý với các điều kiện</label>
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" class="register-button" (click) ="onRegister()">Đăng ký</button>
+                    <div class="divider"></div>
+                    <p class="text-center">Bạn đã có tài khoản? <span><a href="#" class="register-link">Đăng nhập</a></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<app-footer></app-footer>

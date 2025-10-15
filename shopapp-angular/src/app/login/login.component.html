@@ -1,0 +1,51 @@
+<app-header></app-header>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="login-form mx-auto">
+                <h2 class="login-header">Đăng nhập</h2>
+                <div class="form-group">
+                    <label for="phone" class="phone">Phone</label>
+                    <input type="text" class="form-control" id="phone" placeholder="Nhập số điện thoại"
+                        (input) ="onPhoneChange()" required
+                        [(ngModel)] = "phone"
+                        (focus)="loginForm.form.markAsTouched()">
+                    <div class="divider-nospace"></div>
+                </div>
+                <div class="mt-5"></div>
+                <div class="form-group password-field">
+                    <label for="password" class="password">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu"
+                        [(ngModel)] = "password"
+                        name="password" required>
+                    <i class="password-toggle fas fa-eye-slash"></i>
+                    <div class="divider-nospace"></div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check checkbox-text">
+                        <span style="display: flex;">
+                            <input type="checkbox" name="" id="remember" class="form-check-input">
+                            <label for="remember" class="form-check-label text-start">Nhớ tài khoản</label>
+                        </span>
+                        <a href="#" class="register-link">Quên mật khẩu</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <select name="" id="" class="form-control access-right">
+                        <option selected disabled>Chọn quyền truy cập</option>
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+                <button type="button" class="login-button"
+                    (click)="onLogIn()">
+                    Đăng nhập
+                </button>
+                <div class="divider"></div>
+                <p class="text-center">Bạn chưa đăng ký?</p>
+                <a href="#" class="register-link">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+</div>
+<app-footer></app-footer>

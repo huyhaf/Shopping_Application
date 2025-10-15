@@ -1,6 +1,6 @@
 package com.huyhaf.shopapp.sevices;
 
-import com.huyhaf.shopapp.components.JwtTokenUtil;
+import com.huyhaf.shopapp.components.JwtTokenUtils;
 import com.huyhaf.shopapp.dtos.UserDTO;
 import com.huyhaf.shopapp.exceptions.DataNotFoundException;
 import com.huyhaf.shopapp.exceptions.PermissionDenyException;
@@ -24,7 +24,7 @@ public class UserService implements IUserService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     @Override
     public User createUser(UserDTO userDTO) throws Exception {

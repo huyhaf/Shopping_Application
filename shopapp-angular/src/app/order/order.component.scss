@@ -1,0 +1,62 @@
+.container{
+    color: aliceblue;
+}
+.intro-section {
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+.product-header {
+    color: rgb(223, 66, 176);
+}
+.form-control {
+    background-color: rgb(19, 23, 42);
+    border: 1px solid rgb(35, 39, 61);
+    color: white;
+}
+.form-control:focus {
+    background-color: rgb(19, 23, 42);
+    border-color: white;
+}
+.form-label {
+    color: white;
+}
+.product-order {
+    color: rgb(144, 240, 229);
+}
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 10px;
+    border: none;
+    border: 1px solid rgb(247, 248, 249);
+    border-spacing: 0;
+    background-color: rgb(13, 14, 78);
+}
+th,td {
+    text-align: center;
+    padding: 10px;
+}
+.product-info {
+    display: flex;
+    align-items: center;
+}
+.product-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.product-name {
+    color: white;
+    margin-right: 10px;
+}
+.btn-gradient {
+    background: linear-gradient(to right, rgb(242, 169, 219), rgb(117, 94, 168));
+    color: white;
+    border-radius: 30px;
+    width: 200px;
+}
+.btn-gradient:hover {
+    background: linear-gradient(to right, rgb(240,101,197), rgb(127,68,255));
+}
