@@ -1,8 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
-import { LoginDTO } from '../dtos/user/login.dto';
+import { UserService } from '../../services/user.service';
+import { LoginDTO } from '../../dtos/user/login.dto';
+import { LoginResponse } from '../../responses/user/login.response';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +14,14 @@ import { LoginDTO } from '../dtos/user/login.dto';
 })
 export class LoginComponent {
   @ViewChild('loginForm') loginForm!:NgForm;
-  phone:string;
-  password:string;
+  phone:string = '';
+  password:string = '';
   
-  constructor(private router:Router, private userService:UserService) {
-    this.phone = '';
-    this.password = '';
+  constructor(
+    private router:Router, 
+    private userService:UserService,
+    private tokenService:TokenService
+  ) {
   }
   onPhoneChange() {
     console.log("phone changed" + this.phone);
@@ -38,10 +42,10 @@ export class LoginComponent {
     
     this.userService.login(loginDTO).subscribe(
       {
-        next: (response : any) => {
+        next: (response : LoginResponse) => {
           debugger
-          // show alert with the response body
-          console.log('Login successful.\n\nResponse:\n' + JSON.stringify(response, null, 2));
+          const {token} = response;
+          this.tokenService.setToken(token);
           // this.router.navigate(['/login']);
         },
         complete: () => {
