@@ -57,11 +57,11 @@ Edit `src/main/resources/application.yml` if needed:
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/shopapp?useSSL=false&serverTimezone=UTC
-    username: root
+    username: <username>
     password: <your-db-password>
 jwt:
-  expiration: 2592000
-  secretKey: NffcMU59SPexARr9+kWLGZc4LmMah+HhKpNMvBYD+Rc=
+  expiration: <expiration>
+  secretKey: <secretKey>
 ```
 
 ### 4. Run the Application
