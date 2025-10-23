@@ -11,4 +11,5 @@ public class MessageKeys {
     public static final String CATEGORY_CREATE_SUCCESS = "category.create.success";
     public static final String CATEGORY_UPDATE_SUCCESS = "category.update.success";
 
+    public static final String ROLE_NOT_FOUND = "role.notfound";
 }
