@@ -1,6 +1,7 @@
 package com.huyhaf.shopapp.sevices;
 
 import com.huyhaf.shopapp.components.JwtTokenUtils;
+import com.huyhaf.shopapp.components.LocalizationUtils;
 import com.huyhaf.shopapp.dtos.UserDTO;
 import com.huyhaf.shopapp.exceptions.DataNotFoundException;
 import com.huyhaf.shopapp.exceptions.PermissionDenyException;
@@ -8,6 +9,8 @@ import com.huyhaf.shopapp.models.Role;
 import com.huyhaf.shopapp.models.User;
 import com.huyhaf.shopapp.repositories.RoleRepository;
 import com.huyhaf.shopapp.repositories.UserRepository;
+import com.huyhaf.shopapp.utils.MessageKeys;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +29,7 @@ public class UserService implements IUserService{
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
+    private final LocalizationUtils localizationUtils;
     @Override
     public User createUser(UserDTO userDTO) throws Exception {
         String phoneNumber = userDTO.getPhoneNumber();
@@ -56,7 +60,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public String login(String phoneNumber, String password) throws Exception{
+    public String login(String phoneNumber, String password, Long roleId) throws Exception{
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
         if (optionalUser.isEmpty()) {
             throw new DataNotFoundException("Invalid phone number / password");
@@ -68,6 +72,10 @@ public class UserService implements IUserService{
             if (!passwordEncoder.matches(password, existingUser.getPassword())){
                 throw new BadCredentialsException("Wrong phone number or password");
             }
+        }
+        Optional<Role> optionalRole = roleRepository.findById(roleId);
+        if(optionalRole.isEmpty() || !roleId.equals(existingUser.getRole().getId())){
+            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_NOT_FOUND));
         }
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(phoneNumber, password, existingUser.getAuthorities());
