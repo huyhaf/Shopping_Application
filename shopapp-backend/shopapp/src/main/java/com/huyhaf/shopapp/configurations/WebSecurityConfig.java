@@ -35,13 +35,11 @@ public class WebSecurityConfig {
         .authorizeHttpRequests(request -> request
             .requestMatchers(
                 String.format("%s/users/login", apiPrefix),
-                String.format("%s/users/register", apiPrefix))
+                String.format("%s/users/register", apiPrefix),
+                String.format("%s/roles", apiPrefix))
             .permitAll()
             .requestMatchers(HttpMethod.GET,
                 String.format("%s/categories**", apiPrefix))
-            .hasAnyRole(Role.USER, Role.ADMIN)
-            .requestMatchers(HttpMethod.GET,
-                String.format("%s/roles**", apiPrefix))
             .hasAnyRole(Role.USER, Role.ADMIN)
             .requestMatchers(HttpMethod.POST,
                 String.format("%s/categories/**", apiPrefix))
