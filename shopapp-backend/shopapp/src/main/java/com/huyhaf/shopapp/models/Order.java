@@ -64,9 +64,4 @@ public class Order {
 
     @Column(name = "active")
     private Boolean active;
-
-    public void getStock(){
-        Category category = new Category();
-        int stock = category.getStock();
-    }
 }
