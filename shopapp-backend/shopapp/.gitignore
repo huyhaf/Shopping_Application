@@ -34,5 +34,6 @@ build/
 
 ### Application Configuration ###
 src/main/resources/application.txt
+src/main/resources/application-dev.txt
 
 .github
