@@ -3,6 +3,8 @@ package com.huyhaf.shopapp.sevices;
 import com.huyhaf.shopapp.dtos.CategoryDTO;
 import com.huyhaf.shopapp.models.Category;
 import com.huyhaf.shopapp.repositories.CategoryRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class CategoryService implements ICategoryService{
     private final CategoryRepository categoryRepository;
     @Override
+    @Transactional
     public Category createCategory(CategoryDTO categoryDTO) {
         Category category = Category.builder().name(categoryDTO.getName()).build();
         return categoryRepository.save(category);
@@ -30,6 +33,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @Transactional
     public Category updateCategory(long categoryId, CategoryDTO category) {
         Category existingCategory = getCategoryById(categoryId);
         existingCategory.setName(category.getName());
@@ -38,6 +42,7 @@ public class CategoryService implements ICategoryService{
     }
 
     @Override
+    @Transactional
     public void deleteCategory(long categoryId) {
         categoryRepository.deleteById(categoryId);
     }

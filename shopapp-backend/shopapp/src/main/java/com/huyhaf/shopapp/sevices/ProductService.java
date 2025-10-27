@@ -11,6 +11,8 @@ import com.huyhaf.shopapp.repositories.CategoryRepository;
 import com.huyhaf.shopapp.repositories.ProductImageRepository;
 import com.huyhaf.shopapp.repositories.ProductRepository;
 import com.huyhaf.shopapp.responses.ProductResponse;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +28,7 @@ public class ProductService implements IProductService {
     private final ProductImageRepository productImageRepository;
 
     @Override
+    @Transactional
     public Product createProduct(ProductDTO productDTO) throws Exception {
         Category existingCategory = categoryRepository.findById(productDTO.getCategoryId())
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id:" + productDTO.getCategoryId()));
@@ -46,13 +49,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<ProductResponse> getAllProducts(PageRequest pageRequest) {
-        return productRepository
-                .findAll(pageRequest)
-                .map(ProductResponse::fromProduct);
+    public Page<ProductResponse> getAllProducts(String keyword, Long categoryId, PageRequest pageRequest) {
+        Page<Product> productsPage = productRepository.searchProducts(categoryId, keyword, pageRequest);
+        return productsPage.map(ProductResponse::fromProduct);
     }
 
     @Override
+    @Transactional
     public Product updateProduct(long id, ProductDTO productDTO) throws Exception {
         Product existingProduct;
         try {
@@ -74,6 +77,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(long productId) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         optionalProduct.ifPresent(productRepository::delete);
@@ -85,6 +89,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public ProductImage createProductImage(long productId, ProductImageDTO productImageDTO) throws Exception {
         Product existingProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id:" + productImageDTO.getProductId()));

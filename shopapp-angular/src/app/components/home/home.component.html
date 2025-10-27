@@ -16,144 +16,50 @@
     </div>
     <!-- Products Grid -->
     <div class="row">
-        <div class="col-lg-4 col-md-6 mb-4">
+        <div class="col-lg-4 col-md-6 mb-4" *ngFor="let product of products">
             <div class="product-item">
-                <img 
-                src="https://images.pexels.com/photos/1266982/pexels-photo-1266982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="This is a product image" class="product-image">
-                <h3 class="product-name">Product 1</h3>
-                <p class="product-description">This is a product description</p>
-                <p class="product-warrenty">12 tháng</p>
-                <p class="product-price">100.000đ</p>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
+                <img [src]="product.url" 
+                     [alt]="product.name" 
+                     class="product-image">
+                <h3 class="product-name">{{product.name}}</h3>
+                <p class="product-description">{{product.description}}</p>
+                <p class="product-price">{{product.price}}đ</p>
+                <!-- <div class="product-rating">
+                    <i class="fas fa-star" *ngFor="let star of [].constructor(product.rating)"></i>
+                    <i class="far fa-star" *ngFor="let star of [].constructor(5 - product.rating)"></i>
+                </div> -->
                 <div class="product-actions">
-                    <button class="btn btn-primary">Them vao gio hang</button>
+                    <button class="btn btn-primary">Thêm vào giỏ hàng</button>
                     <span class="space-x"></span>
                     <button class="btn btn-success">Mua ngay</button>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="product-item">
-                <img 
-                src="https://images.pexels.com/photos/1266982/pexels-photo-1266982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="This is a product image" class="product-image">
-                <h3 class="product-name">Product 2</h3>
-                <p class="product-description">This is a product description</p>
-                <p class="product-warrenty">12 tháng</p>
-                <p class="product-price">150.000đ</p>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="product-actions">
-                    <button class="btn btn-primary">Them vao gio hang</button>
-                    <span class="space-x"></span>
-                    <button class="btn btn-success">Mua ngay</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="product-item">
-                <img 
-                src="https://images.pexels.com/photos/1266982/pexels-photo-1266982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="This is a product image" class="product-image">
-                <h3 class="product-name">Product 3</h3>
-                <p class="product-description">This is a product description</p>
-                <p class="product-warrenty">12 tháng</p>
-                <p class="product-price">200.000đ</p>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                </div>
-                <div class="product-actions">
-                    <button class="btn btn-primary">Them vao gio hang</button>
-                    <span class="space-x"></span>
-                    <button class="btn btn-success">Mua ngay</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="product-item">
-                <img 
-                src="https://images.pexels.com/photos/1266982/pexels-photo-1266982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="This is a product image" class="product-image">
-                <h3 class="product-name">Product 4</h3>
-                <p class="product-description">This is a product description</p>
-                <p class="product-warrenty">12 tháng</p>
-                <p class="product-price">250.000đ</p>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <div class="product-actions">
-                    <button class="btn btn-primary">Them vao gio hang</button>
-                    <span class="space-x"></span>
-                    <button class="btn btn-success">Mua ngay</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="product-item">
-                <img 
-                src="https://images.pexels.com/photos/1266982/pexels-photo-1266982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="This is a product image" class="product-image">
-                <h3 class="product-name">Product 5</h3>
-                <p class="product-description">This is a product description</p>
-                <p class="product-warrenty">12 tháng</p>
-                <p class="product-price">300.000đ</p>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="product-actions">
-                    <button class="btn btn-primary">Them vao gio hang</button>
-                    <span class="space-x"></span>
-                    <button class="btn btn-success">Mua ngay</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="product-item">
-                <img 
-                src="https://images.pexels.com/photos/1266982/pexels-photo-1266982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                alt="This is a product image" class="product-image">
-                <h3 class="product-name">Product 6</h3>
-                <p class="product-description">This is a product description</p>
-                <p class="product-warrenty">12 tháng</p>
-                <p class="product-price">350.000đ</p>
-                <div class="product-rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                </div>
-                <div class="product-actions">
-                    <button class="btn btn-primary">Them vao gio hang</button>
-                    <span class="space-x"></span>
-                    <button class="btn btn-success">Mua ngay</button>
-                </div>
-            </div>
-        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Product navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" *ngIf="currentPage > 1">
+                    <a class="page-link" href="#" (click)="onPageChange(1)" >First</a>
+                </li>
+                <li class="page-item" *ngIf="currentPage > 1">
+                    <a class="page-link" href="#" (click)="onPageChange(currentPage - 1)">Previous</a>
+                </li>
+                <ng-container *ngFor="let page of visiblePages">
+                    <li class="page-item" [ngClass]="{'active': page === currentPage}">
+                        <a href="#" class="page-link" (click)="onPageChange(page)">{{page}}</a>
+                    </li>
+                </ng-container>
+                <li class="page-item" *ngIf="currentPage < totalPages">
+                    <a class="page-link" href="#" (click)="onPageChange(currentPage + 1)">Next</a>
+                </li>
+                <li class="page-item" *ngIf="currentPage < totalPages">
+                    <a class="page-link" href="#" (click)="onPageChange(totalPages)">Last</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 <app-footer></app-footer>

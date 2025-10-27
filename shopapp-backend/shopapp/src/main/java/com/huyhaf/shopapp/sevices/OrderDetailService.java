@@ -8,6 +8,8 @@ import com.huyhaf.shopapp.models.Product;
 import com.huyhaf.shopapp.repositories.OrderDetailRepository;
 import com.huyhaf.shopapp.repositories.OrderRepository;
 import com.huyhaf.shopapp.repositories.ProductRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class OrderDetailService implements IOrderDetailService{
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     public OrderDetail createOrderDetail(OrderDetailDTO newOrderDetailDTO) throws DataNotFoundException {
         //check whether the order exists
         Order order = orderRepository.findById(newOrderDetailDTO.getOrderId()).orElseThrow(() ->
@@ -46,6 +49,7 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
+    @Transactional
     public OrderDetail updateOrderDetail(Long id, OrderDetailDTO newOrderDetailDTO) throws DataNotFoundException {
         OrderDetail existingOrderDetail = orderDetailRepository.findById(id).orElseThrow(() ->
                 new DataNotFoundException("Can not find orderdetail with id "+ id));
@@ -63,6 +67,7 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         orderDetailRepository.deleteById(id);
     }
