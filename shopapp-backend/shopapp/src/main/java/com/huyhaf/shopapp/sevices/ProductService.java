@@ -12,6 +12,10 @@ import com.huyhaf.shopapp.repositories.ProductImageRepository;
 import com.huyhaf.shopapp.repositories.ProductRepository;
 import com.huyhaf.shopapp.responses.ProductResponse;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -40,6 +44,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Cacheable(value = "products", key = "#productId")
+    // Lần đầu gọi, code này sẽ chạy và kết quả được lưu vào cache
+    // Lần sau gọi với cùng productId, kết quả được trả về từ Redis, không chạy code bên dưới
     public Product getProductById(long productId) throws Exception {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find product with id:"+productId));
@@ -53,6 +60,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @CachePut(value = "products", key = "#id") // Cập nhật lại cache khi sửa
     public Product updateProduct(long id, ProductDTO productDTO) throws Exception {
         Product existingProduct;
         try {
@@ -68,12 +76,13 @@ public class ProductService implements IProductService {
             existingProduct.setPrice(productDTO.getPrice());
             existingProduct.setDescription(productDTO.getDescription());
             existingProduct.setThumbnail(productDTO.getThumbnail());
-            return productRepository.save(existingProduct);
+            return productRepository.save(existingProduct); // Giá trị trả về sẽ ghi đè cache cũ
         }
         return null;
     }
 
     @Override
+    @CacheEvict(value = "products", key = "#productId") // Xóa cache khi xóa
     public void deleteProduct(long productId) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         optionalProduct.ifPresent(productRepository::delete);
