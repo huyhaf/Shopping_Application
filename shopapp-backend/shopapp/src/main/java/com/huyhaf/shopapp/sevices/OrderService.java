@@ -9,6 +9,12 @@ import com.huyhaf.shopapp.repositories.OrderRepository;
 import com.huyhaf.shopapp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,7 +27,13 @@ public class OrderService implements IOrderService{
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
+    private final KafkaTemplate <String,Long> kafkaTemplate;
+
+    private static final String ORDER_CREATED_TOPIC= "order_created";
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
     @Override
+    @CacheEvict(value = "orders", allEntries = true)
     public Order createOrder(OrderDTO orderDTO) throws Exception {
         User user = userRepository.findById(orderDTO.getUserId())
                 .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + orderDTO.getUserId()));
@@ -41,10 +53,19 @@ public class OrderService implements IOrderService{
         order.setShippingDate(shippingDate);
         order.setActive(true);
         orderRepository.save(order);
+
+        try {
+            kafkaTemplate.send(ORDER_CREATED_TOPIC, order.getId());
+            logger.info("Sent order created event to Kafka for order id: " + order.getId());
+        } catch (Exception e) {
+            logger.error("Failed to send order created event to Kafka for order id: " + order.getId(), e);
+        }
+
         return order;
     }
 
     @Override
+    @CachePut(value = "orders", key = "#id")
     public Order updateOrder(Long id, OrderDTO orderDTO) throws DataNotFoundException {
         Order order = orderRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Can not find order with id: "+ id));
@@ -58,11 +79,13 @@ public class OrderService implements IOrderService{
     }
 
     @Override
+    @Cacheable(value = "orders", key = "#id")
     public Order getOrder(Long id) {
         return orderRepository.findById(id).orElse(null);
     }
 
     @Override
+    @CacheEvict(value = "orders", key = "#id")
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
         if (order != null) {
@@ -72,6 +95,7 @@ public class OrderService implements IOrderService{
     }
 
     @Override
+    @Cacheable(value = "ordersByUserId", key = "#userId")
     public List<Order> findByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
     }

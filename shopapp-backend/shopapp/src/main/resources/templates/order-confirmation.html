@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { width: 90%; margin: auto; padding: 20px; border: 1px solid #ddd; }
+        .header { font-size: 24px; color: #4CAF50; }
+        .content { margin-top: 20px; }
+        .footer { margin-top: 30px; font-size: 12px; color: #888; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            ShopApp - Xác nhận đơn hàng
+        </div>
+        <div class="content">
+            <p>Xin chào <strong th:text="${order.fullName}">Tên Khách Hàng</strong>,</p>
+            <p>Cảm ơn bạn đã đặt hàng tại ShopApp. Đơn hàng của bạn đã được xác nhận!</p>
+            
+            <h3>Chi tiết đơn hàng</h3>
+            <ul>
+                <li><strong>Mã đơn hàng:</strong> <span th:text="${order.id}">#12345</span></li>
+                <li><strong>Tổng tiền:</strong>
+                    <span th:text="${#numbers.formatDecimal(order.totalMoney, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'">100.000 VNĐ</span>
+                </li>
+                <li><strong>Địa chỉ giao hàng:</strong> <span th:text="${order.shippingAddress}">Địa chỉ</span></li>
+            </ul>
+
+            <h3>Sản phẩm đã đặt:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="detail : ${orderDetails}">
+                        <td th:text="${detail.product.name}">Tên sản phẩm</td>
+                        <td th:text="${detail.numberOfProducts}">1</td>
+                        <td th:text="${#numbers.formatDecimal(detail.price, 0, 'COMMA', 2, 'POINT')} + ' VNĐ'">50.000 VNĐ</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <p>Trân trọng,<br/>Đội ngũ ShopApp</p>
+        </div>
+    </div>
+</body>
+</html>

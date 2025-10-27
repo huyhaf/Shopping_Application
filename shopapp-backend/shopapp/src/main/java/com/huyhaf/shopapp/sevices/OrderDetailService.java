@@ -9,6 +9,10 @@ import com.huyhaf.shopapp.repositories.OrderDetailRepository;
 import com.huyhaf.shopapp.repositories.OrderRepository;
 import com.huyhaf.shopapp.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +25,7 @@ public class OrderDetailService implements IOrderDetailService{
     private final ProductRepository productRepository;
 
     @Override
+    @CacheEvict(value = "orderDetails", allEntries = true)
     public OrderDetail createOrderDetail(OrderDetailDTO newOrderDetailDTO) throws DataNotFoundException {
         //check whether the order exists
         Order order = orderRepository.findById(newOrderDetailDTO.getOrderId()).orElseThrow(() ->
@@ -40,12 +45,14 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
+    @Cacheable(value = "orderDetails", key = "#id")
     public OrderDetail getOrderDetail(Long id) throws DataNotFoundException {
         return orderDetailRepository.findById(id).orElseThrow(() ->
                 new DataNotFoundException("Can not find orderdetail with id "+ id));
     }
 
     @Override
+    @CachePut(value = "orderDetails", key = "#id")
     public OrderDetail updateOrderDetail(Long id, OrderDetailDTO newOrderDetailDTO) throws DataNotFoundException {
         OrderDetail existingOrderDetail = orderDetailRepository.findById(id).orElseThrow(() ->
                 new DataNotFoundException("Can not find orderdetail with id "+ id));
@@ -63,11 +70,13 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
+    @CacheEvict(value = "orderDetails", key = "#id")
     public void deleteById(Long id) {
         orderDetailRepository.deleteById(id);
     }
 
     @Override
+    @Cacheable(value = "orderDetailsByOrderId", key = "#orderId")
     public List<OrderDetail> findByOrderId(Long orderId) {
         return orderDetailRepository.findByOrderId(orderId);
     }

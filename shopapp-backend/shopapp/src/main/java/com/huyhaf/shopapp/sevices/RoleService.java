@@ -2,6 +2,7 @@ package com.huyhaf.shopapp.sevices;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.huyhaf.shopapp.models.Role;
@@ -15,6 +16,7 @@ public class RoleService implements IRoleService{
     private final RoleRepository roleRepository;
 
     @Override
+    @Cacheable(value = "roles")
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
