@@ -16,7 +16,6 @@ export class RoleService {
             'Content-Type': 'application/json',
             'Accept-Language':'vi'
         });
-
     }
     getRoles() {
         return this.http.get<any[]>(this.apiUrl);

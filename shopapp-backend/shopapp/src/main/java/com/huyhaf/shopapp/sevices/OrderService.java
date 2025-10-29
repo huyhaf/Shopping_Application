@@ -7,6 +7,8 @@ import com.huyhaf.shopapp.models.OrderStatus;
 import com.huyhaf.shopapp.models.User;
 import com.huyhaf.shopapp.repositories.OrderRepository;
 import com.huyhaf.shopapp.repositories.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -32,7 +34,9 @@ public class OrderService implements IOrderService{
     private static final String ORDER_CREATED_TOPIC= "order_created";
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
+
     @Override
+    @Transactional
     @CacheEvict(value = "orders", allEntries = true)
     public Order createOrder(OrderDTO orderDTO) throws Exception {
         User user = userRepository.findById(orderDTO.getUserId())
@@ -65,6 +69,7 @@ public class OrderService implements IOrderService{
     }
 
     @Override
+    @Transactional
     @CachePut(value = "orders", key = "#id")
     public Order updateOrder(Long id, OrderDTO orderDTO) throws DataNotFoundException {
         Order order = orderRepository.findById(id).orElseThrow(
@@ -85,6 +90,7 @@ public class OrderService implements IOrderService{
     }
 
     @Override
+    @Transactional
     @CacheEvict(value = "orders", key = "#id")
     public void deleteOrder(Long id) {
         Order order = orderRepository.findById(id).orElse(null);

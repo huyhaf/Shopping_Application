@@ -8,6 +8,8 @@ import com.huyhaf.shopapp.models.Product;
 import com.huyhaf.shopapp.repositories.OrderDetailRepository;
 import com.huyhaf.shopapp.repositories.OrderRepository;
 import com.huyhaf.shopapp.repositories.ProductRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,6 +27,7 @@ public class OrderDetailService implements IOrderDetailService{
     private final ProductRepository productRepository;
 
     @Override
+    @Transactional
     @CacheEvict(value = "orderDetails", allEntries = true)
     public OrderDetail createOrderDetail(OrderDetailDTO newOrderDetailDTO) throws DataNotFoundException {
         //check whether the order exists
@@ -52,6 +55,7 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
+    @Transactional
     @CachePut(value = "orderDetails", key = "#id")
     public OrderDetail updateOrderDetail(Long id, OrderDetailDTO newOrderDetailDTO) throws DataNotFoundException {
         OrderDetail existingOrderDetail = orderDetailRepository.findById(id).orElseThrow(() ->
@@ -70,6 +74,7 @@ public class OrderDetailService implements IOrderDetailService{
     }
 
     @Override
+    @Transactional
     @CacheEvict(value = "orderDetails", key = "#id")
     public void deleteById(Long id) {
         orderDetailRepository.deleteById(id);

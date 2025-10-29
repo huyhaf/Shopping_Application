@@ -11,6 +11,7 @@ import com.huyhaf.shopapp.repositories.RoleRepository;
 import com.huyhaf.shopapp.repositories.UserRepository;
 import com.huyhaf.shopapp.utils.MessageKeys;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -85,6 +86,7 @@ public class UserService implements IUserService{
     }
 
     @Override
+    @Transactional
     public User updateUser(UserDTO userDTO) throws DataNotFoundException {
         Optional<User> optionalUser = userRepository.findByPhoneNumber(userDTO.getPhoneNumber());
         if (optionalUser.isEmpty()) {
